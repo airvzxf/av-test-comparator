@@ -14,47 +14,40 @@ struct antivirus {
     }
 
     struct general {
-        unsigned short topProduct;
-        float protection;
-        float performance;
-        float usability;
+        unsigned short topProduct{};
+        float protection{};
+        float performance{};
+        float usability{};
     } general{};
 
-    explicit antivirus() {
-        this->general.topProduct = 0;
-        this->general.protection = 0;
-        this->general.performance = 0;
-        this->general.usability = 0;
-    }
-
     struct result {
-        unsigned short year;
-        unsigned short month;
+        unsigned short year{};
+        unsigned short month{};
         std::string version;
-        unsigned short topProduct;
-        float protection;
-        float dayZeroPrev;
-        float dayZeroNow;
-        float detectionPrev;
-        float detectionNow;
-        float performance;
-        float slowingDownStand;
-        float slowingDownHigh;
-        float slowerDownStand;
-        float slowerDownHigh;
-        float slowerLaunchStand;
-        float slowerLaunchHigh;
-        float slowerInstallationStand;
-        float slowerInstallationHigh;
-        float slowerCopyingStand;
-        float slowerCopyingHigh;
-        float usability;
-        float falseWarningsPrev;
-        float falseWarningsNow;
-        float falseDetectionsPrev;
-        float falseDetectionsNow;
-        float falseWarnings;
-        float falseBlockages;
+        unsigned short topProduct{};
+        float protection{};
+        float dayZeroPrev{};
+        float dayZeroNow{};
+        float detectionPrev{};
+        float detectionNow{};
+        float performance{};
+        float slowingDownStand{};
+        float slowingDownHigh{};
+        float slowerDownStand{};
+        float slowerDownHigh{};
+        float slowerLaunchStand{};
+        float slowerLaunchHigh{};
+        float slowerInstallationStand{};
+        float slowerInstallationHigh{};
+        float slowerCopyingStand{};
+        float slowerCopyingHigh{};
+        float usability{};
+        float falseWarningsPrev{};
+        float falseWarningsNow{};
+        float falseDetectionsPrev{};
+        float falseDetectionsNow{};
+        float falseWarnings{};
+        float falseBlockages{};
     };
 
     std::vector<result> results;
@@ -165,19 +158,21 @@ static int extractInformationFrom(const std::string &url) {
     std::string tbody = getHtmlTbodyFrom(table);
     std::string tr;
     std::string td;
-    unsigned short year;
-    unsigned short month;
+    int tdCounter;
+    unsigned short year = 0;
+    unsigned short month = 0;
     std::string producer;
     std::string version;
-    unsigned short topProduct;
-    float protection;
-    float performance;
-    float usability;
+    unsigned short topProduct = 0;
+    float protection = 0;
+    float performance = 0;
+    float usability = 0;
     std::string link;
-    int tdCounter;
+    int exists;
     do {
         tr = getHtmlTrFrom(tbody);
         tdCounter = 0;
+        exists = false;
         do {
             td = getHtmlTdFrom(tr);
             if (tdCounter == 0) {
@@ -197,35 +192,53 @@ static int extractInformationFrom(const std::string &url) {
             }
             tdCounter++;
         } while (!td.empty());
-        if (!producer.empty()) {
-            std::cout << "producer:    -" << producer << "-" << std::endl;
-            std::cout << "version:     -" << version << "-" << std::endl;
-            std::cout << "topProduct:  -" << topProduct << "-" << std::endl;
-            std::cout << "protection:  -" << protection << "-" << std::endl;
-            std::cout << "performance: -" << performance << "-" << std::endl;
-            std::cout << "usability:   -" << usability << "-" << std::endl;
-            std::cout << "link:        -" << link << "-" << std::endl;
-            std::cout << "year:        -" << year << "-" << std::endl;
-            std::cout << "month:       -" << month << "-" << std::endl;
-            allAntivirus.emplace_back(antivirus(producer));
-            if (!allAntivirus.empty()) {
-                allAntivirus.back().general.topProduct += topProduct;
-                allAntivirus.back().general.protection += protection;
-                allAntivirus.back().general.performance += performance;
-                allAntivirus.back().general.usability += usability;
-                allAntivirus.back().results.emplace_back();
-                if (!allAntivirus.back().results.empty()) {
-                    allAntivirus.back().results.back().year = year;
-                    allAntivirus.back().results.back().month = month;
-                    allAntivirus.back().results.back().version = version;
-                    allAntivirus.back().results.back().topProduct = topProduct;
-                    allAntivirus.back().results.back().protection = protection;
-                    allAntivirus.back().results.back().performance = performance;
-                    allAntivirus.back().results.back().usability = usability;
-                }
+
+        if (producer.empty())
+            continue;
+
+        std::cout << "producer:    -" << producer << "-" << std::endl;
+        std::cout << "version:     -" << version << "-" << std::endl;
+        std::cout << "topProduct:  -" << topProduct << "-" << std::endl;
+        std::cout << "protection:  -" << protection << "-" << std::endl;
+        std::cout << "performance: -" << performance << "-" << std::endl;
+        std::cout << "usability:   -" << usability << "-" << std::endl;
+        std::cout << "link:        -" << link << "-" << std::endl;
+        std::cout << "year:        -" << year << "-" << std::endl;
+        std::cout << "month:       -" << month << "-" << std::endl;
+
+        unsigned long index = 0;
+        for (const auto &a: allAntivirus) {
+            if (a.name == producer) {
+                exists = true;
+                break;
             }
-            std::cout << std::endl;
+            index++;
         }
+
+        if (!exists) {
+            allAntivirus.emplace_back(antivirus(producer));
+            index = allAntivirus.size() - 1;
+            std::cout << "Not exists!" << std::endl;
+        }
+        std::cout << "index: " << index << std::endl;
+
+        if (!allAntivirus.empty()) {
+            allAntivirus.at(index).general.topProduct += topProduct;
+            allAntivirus.at(index).general.protection += protection;
+            allAntivirus.at(index).general.performance += performance;
+            allAntivirus.at(index).general.usability += usability;
+            allAntivirus.at(index).results.emplace_back();
+            if (!allAntivirus.at(index).results.empty()) {
+                allAntivirus.at(index).results.back().year = year;
+                allAntivirus.at(index).results.back().month = month;
+                allAntivirus.at(index).results.back().version = version;
+                allAntivirus.at(index).results.back().topProduct = topProduct;
+                allAntivirus.at(index).results.back().protection = protection;
+                allAntivirus.at(index).results.back().performance = performance;
+                allAntivirus.at(index).results.back().usability = usability;
+            }
+        }
+        std::cout << std::endl;
     } while (!tr.empty());
 
     for (const auto &current : allAntivirus) {
@@ -369,7 +382,7 @@ static unsigned short getYearFrom(std::string &link) {
     std::string month = getHtmlInnerFrom(link, "windows-10/", "-");
     transform(month.begin(), month.end(), month.begin(), ::tolower);
     std::string text = getHtmlInnerFrom(link, "windows-10/" + month + "-", "/");
-    return std::strtoul(text.c_str(), nullptr, 0);
+    return (unsigned short) std::strtoul(text.c_str(), nullptr, 0);
 }
 
 static unsigned short getMonthFrom(std::string &link) {
@@ -379,7 +392,7 @@ static unsigned short getMonthFrom(std::string &link) {
         return 1;
     if (text == "february")
         return 2;
-    if (text == "March")
+    if (text == "march")
         return 3;
     if (text == "april")
         return 4;
@@ -403,6 +416,8 @@ static unsigned short getMonthFrom(std::string &link) {
 int main() {
     const std::string mainUrl = "https://www.av-test.org/en/antivirus/home-windows/windows-10/";
 
+    allAntivirus.reserve(30);
+
     std::vector<std::string> urls;
     urls.emplace_back(mainUrl + "august-2020/");
     urls.emplace_back(mainUrl + "june-2020/");
@@ -411,6 +426,10 @@ int main() {
         std::cout << "url: " << url << std::endl << std::endl;
         extractInformationFrom(url);
     }
+
+    std::cout << "sizeof:   " << sizeof(allAntivirus) << '\n';
+    std::cout << "size:     " << allAntivirus.size() << '\n';
+    std::cout << "capacity: " << allAntivirus.capacity() << '\n';
 
     return 0;
 }
