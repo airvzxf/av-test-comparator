@@ -1,9 +1,66 @@
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <curl/curl.h>
 
 static std::string errorMessage;
 static const char *userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0";
+
+struct antivirus {
+    std::string name;
+
+    explicit antivirus(std::string name) {
+        this->name = std::move(name);
+    }
+
+    struct general {
+        unsigned short topProduct;
+        float protection;
+        float performance;
+        float usability;
+    } general{};
+
+    explicit antivirus() {
+        this->general.topProduct = 0;
+        this->general.protection = 0;
+        this->general.performance = 0;
+        this->general.usability = 0;
+    }
+
+    struct result {
+        unsigned short year;
+        unsigned short month;
+        std::string version;
+        unsigned short topProduct;
+        float protection;
+        float dayZeroPrev;
+        float dayZeroNow;
+        float detectionPrev;
+        float detectionNow;
+        float performance;
+        float slowingDownStand;
+        float slowingDownHigh;
+        float slowerDownStand;
+        float slowerDownHigh;
+        float slowerLaunchStand;
+        float slowerLaunchHigh;
+        float slowerInstallationStand;
+        float slowerInstallationHigh;
+        float slowerCopyingStand;
+        float slowerCopyingHigh;
+        float usability;
+        float falseWarningsPrev;
+        float falseWarningsNow;
+        float falseDetectionsPrev;
+        float falseDetectionsNow;
+        float falseWarnings;
+        float falseBlockages;
+    };
+
+    std::vector<result> results;
+};
+
+std::vector<antivirus> allAntivirus;
 
 static size_t writeCallbackWith(void *contents, size_t size, size_t memoryBytes, void *userData);
 
@@ -27,15 +84,19 @@ static std::string getProducerFrom(std::string &htmlCode);
 
 static std::string getProducerVersionFrom(std::string &htmlCode);
 
-static std::string getCertifiedFrom(std::string &htmlCode);
+static unsigned short getCertifiedFrom(std::string &htmlCode);
 
-static std::string getProtectionFrom(std::string &htmlCode);
+static float getProtectionFrom(std::string &htmlCode);
 
-static std::string getPerformanceFrom(std::string &htmlCode);
+static float getPerformanceFrom(std::string &htmlCode);
 
-static std::string getUsabilityFrom(std::string &htmlCode);
+static float getUsabilityFrom(std::string &htmlCode);
 
 static std::string getLinkFrom(std::string &htmlCode);
+
+static unsigned short getYearFrom(std::string &link);
+
+static unsigned short getMonthFrom(std::string &link);
 
 std::string &ltrim(std::string &str, const std::string &chars = "\t\n\v\f\r ") {
     str.erase(0, str.find_first_not_of(chars));
@@ -104,12 +165,14 @@ static int extractInformationFrom(const std::string &url) {
     std::string tbody = getHtmlTbodyFrom(table);
     std::string tr;
     std::string td;
+    unsigned short year;
+    unsigned short month;
     std::string producer;
     std::string version;
-    std::string certified;
-    std::string protection;
-    std::string performance;
-    std::string usability;
+    unsigned short topProduct;
+    float protection;
+    float performance;
+    float usability;
     std::string link;
     int tdCounter;
     do {
@@ -121,7 +184,7 @@ static int extractInformationFrom(const std::string &url) {
                 producer = getProducerFrom(td);
                 version = getProducerVersionFrom(td);
             } else if (tdCounter == 1) {
-                certified = getCertifiedFrom(td);
+                topProduct = getCertifiedFrom(td);
             } else if (tdCounter == 2) {
                 protection = getProtectionFrom(td);
             } else if (tdCounter == 3) {
@@ -129,20 +192,61 @@ static int extractInformationFrom(const std::string &url) {
             } else if (tdCounter == 4) {
                 usability = getUsabilityFrom(td);
                 link = getLinkFrom(td);
+                month = getMonthFrom(link);
+                year = getYearFrom(link);
             }
             tdCounter++;
         } while (!td.empty());
         if (!producer.empty()) {
             std::cout << "producer:    -" << producer << "-" << std::endl;
             std::cout << "version:     -" << version << "-" << std::endl;
-            std::cout << "certified:   -" << certified << "-" << std::endl;
+            std::cout << "topProduct:  -" << topProduct << "-" << std::endl;
             std::cout << "protection:  -" << protection << "-" << std::endl;
             std::cout << "performance: -" << performance << "-" << std::endl;
             std::cout << "usability:   -" << usability << "-" << std::endl;
             std::cout << "link:        -" << link << "-" << std::endl;
+            std::cout << "year:        -" << year << "-" << std::endl;
+            std::cout << "month:       -" << month << "-" << std::endl;
+            allAntivirus.emplace_back(antivirus(producer));
+            if (!allAntivirus.empty()) {
+                allAntivirus.back().general.topProduct += topProduct;
+                allAntivirus.back().general.protection += protection;
+                allAntivirus.back().general.performance += performance;
+                allAntivirus.back().general.usability += usability;
+                allAntivirus.back().results.emplace_back();
+                if (!allAntivirus.back().results.empty()) {
+                    allAntivirus.back().results.back().year = year;
+                    allAntivirus.back().results.back().month = month;
+                    allAntivirus.back().results.back().version = version;
+                    allAntivirus.back().results.back().topProduct = topProduct;
+                    allAntivirus.back().results.back().protection = protection;
+                    allAntivirus.back().results.back().performance = performance;
+                    allAntivirus.back().results.back().usability = usability;
+                }
+            }
             std::cout << std::endl;
         }
     } while (!tr.empty());
+
+    for (const auto &current : allAntivirus) {
+        std::cout << "name: " << current.name << std::endl;
+        std::cout << "general.topProduct:  " << current.general.topProduct << std::endl;
+        std::cout << "general.protection:  " << current.general.protection << std::endl;
+        std::cout << "general.performance: " << current.general.performance << std::endl;
+        std::cout << "general.usability:   " << current.general.usability << std::endl;
+        std::cout << "---------------------------------" << std::endl;
+        for (const auto &result : current.results) {
+            std::cout << "result.year:        " << result.year << std::endl;
+            std::cout << "result.month:       " << result.month << std::endl;
+            std::cout << "result.version:     " << result.version << std::endl;
+            std::cout << "result.topProduct:  " << result.topProduct << std::endl;
+            std::cout << "result.protection:  " << result.protection << std::endl;
+            std::cout << "result.performance: " << result.performance << std::endl;
+            std::cout << "result.usability:   " << result.usability << std::endl;
+            std::cout << "---------------------------------" << std::endl;
+        }
+        std::cout << std::endl;
+    }
 
     return 0;
 }
@@ -162,7 +266,7 @@ getHtmlTagFrom(std::string &htmlCode, const std::string &firstTag, const std::st
         return tagContent;
     }
 
-    std::size_t lastPosition = htmlCode.find(lastTag, firstPosition);
+    std::size_t lastPosition = htmlCode.find(lastTag, firstPosition + firstTag.size());
     if (lastPosition == std::string::npos) {
         if (displayError)
             std::cerr << "Error: Not found the last HTML tag -> " << lastTag << "." << std::endl;
@@ -191,17 +295,16 @@ static std::string getHtmlInnerFrom(std::string &htmlCode, const std::string &fi
     if (firstPosition == std::string::npos)
         return tagContent;
 
-    std::size_t lastPosition = htmlCode.find(lastTag, firstPosition);
+    std::size_t innerPosition = firstPosition + firstTag.size();
+    std::size_t lastPosition = htmlCode.find(lastTag, innerPosition);
     if (lastPosition == std::string::npos)
         return tagContent;
 
-    std::size_t innerPosition = firstPosition + firstTag.size();
     std::size_t size = lastPosition - innerPosition;
     tagContent = htmlCode.substr(innerPosition, size);
 
     return tagContent;
 }
-
 
 static std::string cleanText(std::string text) {
     std::string trimText = trim(text);
@@ -234,32 +337,67 @@ static std::string getProducerVersionFrom(std::string &htmlCode) {
     return cleanText(text);
 }
 
-static std::string getCertifiedFrom(std::string &htmlCode) {
+static unsigned short getCertifiedFrom(std::string &htmlCode) {
     std::string url = getHtmlInnerFrom(htmlCode, "src=\"", "\" alt=\"");
     std::size_t position = url.find("_tp_");
     if (position != std::string::npos)
-        return "Top Product";
-    return "Certified";
+        return 1;
+    return 0;
 }
 
-static std::string getProtectionFrom(std::string &htmlCode) {
+static float getProtectionFrom(std::string &htmlCode) {
     std::string text = getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
-    return cleanText(text);
+    return std::stof(text);
 }
 
-static std::string getPerformanceFrom(std::string &htmlCode) {
+static float getPerformanceFrom(std::string &htmlCode) {
     std::string text = getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
-    return cleanText(text);
+    return std::stof(text);
 }
 
-static std::string getUsabilityFrom(std::string &htmlCode) {
+static float getUsabilityFrom(std::string &htmlCode) {
     std::string text = getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
-    return cleanText(text);
+    return std::stof(text);
 }
 
 static std::string getLinkFrom(std::string &htmlCode) {
     std::string text = getHtmlInnerFrom(htmlCode, "href=\"", "\" tabindex=");
     return "https://www.av-test.org" + cleanText(text) + "/";
+}
+
+static unsigned short getYearFrom(std::string &link) {
+    std::string month = getHtmlInnerFrom(link, "windows-10/", "-");
+    transform(month.begin(), month.end(), month.begin(), ::tolower);
+    std::string text = getHtmlInnerFrom(link, "windows-10/" + month + "-", "/");
+    return std::strtoul(text.c_str(), nullptr, 0);
+}
+
+static unsigned short getMonthFrom(std::string &link) {
+    std::string text = getHtmlInnerFrom(link, "windows-10/", "-");
+    transform(text.begin(), text.end(), text.begin(), ::tolower);
+    if (text == "january")
+        return 1;
+    if (text == "february")
+        return 2;
+    if (text == "March")
+        return 3;
+    if (text == "april")
+        return 4;
+    if (text == "may")
+        return 5;
+    if (text == "june")
+        return 6;
+    if (text == "july")
+        return 7;
+    if (text == "august")
+        return 8;
+    if (text == "september")
+        return 9;
+    if (text == "october")
+        return 10;
+    if (text == "november")
+        return 11;
+    return 12;
 }
 
 int main() {
@@ -268,13 +406,6 @@ int main() {
     std::vector<std::string> urls;
     urls.emplace_back(mainUrl + "august-2020/");
     urls.emplace_back(mainUrl + "june-2020/");
-
-    std::vector<std::string> generalHeaders;
-    generalHeaders.emplace_back("Producer");
-    generalHeaders.emplace_back("Certified");
-    generalHeaders.emplace_back("Protection");
-    generalHeaders.emplace_back("Performance");
-    generalHeaders.emplace_back("Usability");
 
     for (std::string &url : urls) {
         std::cout << "url: " << url << std::endl << std::endl;
