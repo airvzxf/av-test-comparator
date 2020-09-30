@@ -14,6 +14,7 @@ struct antivirus {
     }
 
     struct general {
+        unsigned short reviews{};
         unsigned short topProduct{};
         float protection{};
         float performance{};
@@ -127,7 +128,7 @@ static size_t writeCallbackWith(void *contents, size_t size, size_t memoryBytes,
     return size * memoryBytes;
 }
 
-static int extractInformationFrom(const std::string &url) {
+static std::string getHtmlCodeFrom(const std::string &url) {
     CURL *curl;
     CURLcode res = CURL_LAST;
     std::string readBuffer;
@@ -154,7 +155,12 @@ static int extractInformationFrom(const std::string &url) {
 
     curl_easy_cleanup(curl);
 
-    std::string table = getHtmlTableFrom(readBuffer);
+    return readBuffer;
+}
+
+static int extractInformationFrom(const std::string &url) {
+    std::string htmlCode = getHtmlCodeFrom(url);
+    std::string table = getHtmlTableFrom(htmlCode);
     std::string tbody = getHtmlTbodyFrom(table);
     std::string tr;
     std::string td;
@@ -223,6 +229,7 @@ static int extractInformationFrom(const std::string &url) {
         std::cout << "index: " << index << std::endl;
 
         if (!allAntivirus.empty()) {
+            allAntivirus.at(index).general.reviews += 1;
             allAntivirus.at(index).general.topProduct += topProduct;
             allAntivirus.at(index).general.protection += protection;
             allAntivirus.at(index).general.performance += performance;
@@ -243,6 +250,7 @@ static int extractInformationFrom(const std::string &url) {
 
     for (const auto &current : allAntivirus) {
         std::cout << "name: " << current.name << std::endl;
+        std::cout << "general.reviews:     " << current.general.reviews << std::endl;
         std::cout << "general.topProduct:  " << current.general.topProduct << std::endl;
         std::cout << "general.protection:  " << current.general.protection << std::endl;
         std::cout << "general.performance: " << current.general.performance << std::endl;
