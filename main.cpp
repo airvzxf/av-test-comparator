@@ -61,8 +61,6 @@ static size_t writeCallbackWith(void *contents, size_t size, size_t memoryBytes,
 
 static int extractInformationFrom(const std::string &url);
 
-static std::string cleanText(std::string text);
-
 static std::string getHtmlTableFrom(std::string &htmlCode);
 
 static std::string getHtmlTbodyFrom(std::string &htmlCode);
@@ -88,15 +86,6 @@ static std::string getLinkFrom(std::string &htmlCode);
 static unsigned short getYearFrom(std::string &link);
 
 static unsigned short getMonthFrom(std::string &link);
-
-std::string convertEscapeCharacters(std::string &text) {
-    library::utility::text::replace(text, std::string("&amp;"), std::string("&"));
-    library::utility::text::replace(text, std::string("&apos;"), std::string("'"));
-    library::utility::text::replace(text, std::string("&quot;"), std::string("\""));
-    library::utility::text::replace(text, std::string("&gt;"), std::string(">"));
-    library::utility::text::replace(text, std::string("&lt;"), std::string("<"));
-    return text;
-}
 
 static size_t writeCallbackWith(void *contents, size_t size, size_t memoryBytes, void *userData) {
     ((std::string *) userData)->append((char *) contents, size * memoryBytes);
@@ -247,11 +236,6 @@ static int extractInformationFrom(const std::string &url) {
     return 0;
 }
 
-static std::string cleanText(std::string text) {
-    std::string trimText = library::utility::text::trim(text);
-    return convertEscapeCharacters(trimText);
-}
-
 static std::string getHtmlTableFrom(std::string &htmlCode) {
     return library::html::extract::outer::getTextFrom(htmlCode, "<table>", "</table>");
 }
@@ -270,12 +254,12 @@ static std::string getHtmlTdFrom(std::string &htmlCode) {
 
 static std::string getProducerFrom(std::string &htmlCode) {
     std::string text = library::html::extract::inner::getTextFrom(htmlCode, "<strong>", "</strong>");
-    return cleanText(text);
+    return library::utility::text::clean(text);
 }
 
 static std::string getProducerVersionFrom(std::string &htmlCode) {
     std::string text = library::html::extract::inner::getTextFrom(htmlCode, "style=\"max-width:220px\">", "</span>");
-    return cleanText(text);
+    return library::utility::text::clean(text);
 }
 
 static unsigned short getCertifiedFrom(std::string &htmlCode) {
@@ -321,7 +305,7 @@ static float getUsabilityFrom(std::string &htmlCode) {
 
 static std::string getLinkFrom(std::string &htmlCode) {
     std::string text = library::html::extract::inner::getTextFrom(htmlCode, "href=\"", "\" tabindex=");
-    return "https://www.av-test.org" + cleanText(text) + "/";
+    return "https://www.av-test.org" + library::utility::text::clean(text) + "/";
 }
 
 static unsigned short getYearFrom(std::string &link) {

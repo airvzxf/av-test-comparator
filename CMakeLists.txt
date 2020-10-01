@@ -13,6 +13,8 @@ add_executable(
         library/html/extract/outer.cpp library/html/extract/outer.h
         library/utility/text/trim.cpp library/utility/text/trim.h
         library/utility/text/replace.cpp library/utility/text/replace.h
+        library/utility/text/clean.cpp library/utility/text/clean.h
+        library/utility/text/escape.cpp library/utility/text/escape.h
 )
 
 if (CURL_FOUND)
