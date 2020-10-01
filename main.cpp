@@ -2,6 +2,7 @@
 #include <utility>
 #include <vector>
 #include <curl/curl.h>
+#include "library/library.h"
 
 static std::string errorMessage;
 static const char *userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0";
@@ -59,10 +60,6 @@ std::vector<antivirus> allAntivirus;
 static size_t writeCallbackWith(void *contents, size_t size, size_t memoryBytes, void *userData);
 
 static int extractInformationFrom(const std::string &url);
-
-static std::string
-getHtmlTagFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag, bool extract,
-               bool displayError);
 
 static std::string cleanText(std::string text);
 
@@ -272,94 +269,40 @@ static int extractInformationFrom(const std::string &url) {
     return 0;
 }
 
-static std::string
-getHtmlTagFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag, bool extract = false,
-               bool displayError = true) {
-    std::string tagContent;
-
-    if (htmlCode.empty())
-        return tagContent;
-
-    std::size_t firstPosition = htmlCode.find(firstTag);
-    if (firstPosition == std::string::npos) {
-        if (displayError)
-            std::cerr << "Error: Not found the first HTML tag -> " << firstTag << "." << std::endl;
-        return tagContent;
-    }
-
-    std::size_t lastPosition = htmlCode.find(lastTag, firstPosition + firstTag.size());
-    if (lastPosition == std::string::npos) {
-        if (displayError)
-            std::cerr << "Error: Not found the last HTML tag -> " << lastTag << "." << std::endl;
-        return tagContent;
-    }
-
-    std::size_t size = lastPosition - firstPosition + lastTag.size();
-    tagContent = htmlCode.substr(firstPosition, size);
-
-    if (extract) {
-        const std::string firstCode = htmlCode.substr(0, firstPosition);
-        const std::string lastCode = htmlCode.substr(lastPosition + lastTag.size());
-        htmlCode = firstCode + lastCode;
-    }
-
-    return tagContent;
-}
-
-static std::string getHtmlInnerFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag) {
-    std::string tagContent;
-
-    if (htmlCode.empty())
-        return tagContent;
-
-    std::size_t firstPosition = htmlCode.find(firstTag);
-    if (firstPosition == std::string::npos)
-        return tagContent;
-
-    std::size_t innerPosition = firstPosition + firstTag.size();
-    std::size_t lastPosition = htmlCode.find(lastTag, innerPosition);
-    if (lastPosition == std::string::npos)
-        return tagContent;
-
-    std::size_t size = lastPosition - innerPosition;
-    tagContent = htmlCode.substr(innerPosition, size);
-
-    return tagContent;
-}
-
 static std::string cleanText(std::string text) {
     std::string trimText = trim(text);
     return convertEscapeCharacters(trimText);
 }
 
 static std::string getHtmlTableFrom(std::string &htmlCode) {
-    return getHtmlTagFrom(htmlCode, "<table>", "</table>");
+    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<table>", "</table>");
 }
 
 static std::string getHtmlTbodyFrom(std::string &htmlCode) {
-    return getHtmlTagFrom(htmlCode, "<tbody>", "</tbody>");
+    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<tbody>", "</tbody>");
 }
 
 static std::string getHtmlTrFrom(std::string &htmlCode) {
-    return getHtmlTagFrom(htmlCode, "<tr", "</tr>", true, false);
+    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<tr", "</tr>", true, false);
 }
 
 static std::string getHtmlTdFrom(std::string &htmlCode) {
-    return getHtmlTagFrom(htmlCode, "<td", "</td>", true, false);
+    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<td", "</td>", true, false);
 }
 
 static std::string getProducerFrom(std::string &htmlCode) {
-    std::string text = getHtmlInnerFrom(htmlCode, "<strong>", "</strong>");
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "<strong>", "</strong>");
     return cleanText(text);
 }
 
 static std::string getProducerVersionFrom(std::string &htmlCode) {
-    std::string text = getHtmlInnerFrom(htmlCode, "style=\"max-width:220px\">", "</span>");
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "style=\"max-width:220px\">",
+                                                                       "</span>");
     return cleanText(text);
 }
 
 static unsigned short getCertifiedFrom(std::string &htmlCode) {
-    std::string url = getHtmlInnerFrom(htmlCode, "src=\"", "\" alt=\"");
+    std::string url = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "src=\"", "\" alt=\"");
     std::size_t position = url.find("_tp_");
     if (position != std::string::npos)
         return 1;
@@ -367,34 +310,52 @@ static unsigned short getCertifiedFrom(std::string &htmlCode) {
 }
 
 static float getProtectionFrom(std::string &htmlCode) {
-    std::string text = getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
-    return std::stof(text);
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
+    try {
+        return std::stof(text);
+    }
+    catch (const std::exception &error) {
+        std::cerr << "Error: Trying to get the PROTECTION value from the general page." << std::endl << std::endl;
+        return 0;
+    }
 }
 
 static float getPerformanceFrom(std::string &htmlCode) {
-    std::string text = getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
-    return std::stof(text);
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
+    try {
+        return std::stof(text);
+    }
+    catch (const std::exception &error) {
+        std::cerr << "Error: Trying to get the PERFORMANCE value from the general page." << std::endl << std::endl;
+        return 0;
+    }
 }
 
 static float getUsabilityFrom(std::string &htmlCode) {
-    std::string text = getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
-    return std::stof(text);
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
+    try {
+        return std::stof(text);
+    }
+    catch (const std::exception &error) {
+        std::cerr << "Error: Trying to get the USABILITY value from the general page." << std::endl << std::endl;
+        return 0;
+    }
 }
 
 static std::string getLinkFrom(std::string &htmlCode) {
-    std::string text = getHtmlInnerFrom(htmlCode, "href=\"", "\" tabindex=");
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "href=\"", "\" tabindex=");
     return "https://www.av-test.org" + cleanText(text) + "/";
 }
 
 static unsigned short getYearFrom(std::string &link) {
-    std::string month = getHtmlInnerFrom(link, "windows-10/", "-");
+    std::string month = library::html::extract::inner::getHtmlInnerFrom(link, "windows-10/", "-");
     transform(month.begin(), month.end(), month.begin(), ::tolower);
-    std::string text = getHtmlInnerFrom(link, "windows-10/" + month + "-", "/");
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(link, "windows-10/" + month + "-", "/");
     return (unsigned short) std::strtoul(text.c_str(), nullptr, 0);
 }
 
 static unsigned short getMonthFrom(std::string &link) {
-    std::string text = getHtmlInnerFrom(link, "windows-10/", "-");
+    std::string text = library::html::extract::inner::getHtmlInnerFrom(link, "windows-10/", "-");
     transform(text.begin(), text.end(), text.begin(), ::tolower);
     if (text == "january")
         return 1;
@@ -428,7 +389,7 @@ int main() {
 
     std::vector<std::string> urls;
     urls.emplace_back(mainUrl + "august-2020/");
-    urls.emplace_back(mainUrl + "june-2020/");
+//    urls.emplace_back(mainUrl + "june-2020/");
 
     for (std::string &url : urls) {
         std::cout << "url: " << url << std::endl << std::endl;
