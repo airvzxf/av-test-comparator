@@ -6,3 +6,4 @@ https://www.av-test.org
 
 Tech TODOs:
 - [] Split the main code into small pieces using namespaces.
+- [] Add error stack trace with the information of the extraction.
