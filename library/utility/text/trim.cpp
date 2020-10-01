@@ -1,4 +1,4 @@
-#include "text.h"
+#include "trim.h"
 
 namespace library::utility::text {
     std::string &leftTrim(std::string &text, const std::string &chars) {

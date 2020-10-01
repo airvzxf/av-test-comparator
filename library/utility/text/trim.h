@@ -1,5 +1,5 @@
-#ifndef AV_TEST_COMPARATOR_TEXT_H
-#define AV_TEST_COMPARATOR_TEXT_H
+#ifndef AV_TEST_COMPARATOR_TRIM_H
+#define AV_TEST_COMPARATOR_TRIM_H
 
 #include <string>
 
@@ -12,4 +12,4 @@ namespace library::utility::text {
 
     std::string &trim(std::string &text);
 }
-#endif //AV_TEST_COMPARATOR_TEXT_H
+#endif //AV_TEST_COMPARATOR_TRIM_H

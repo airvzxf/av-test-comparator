@@ -3,7 +3,7 @@
 
 #include "html/extract/inner.h"
 #include "html/extract/outer.h"
-#include "utility/replace.h"
-#include "utility/text.h"
+#include "utility/text/replace.h"
+#include "utility/text/trim.h"
 
 #endif //AV_TEST_COMPARATOR_LIBRARY_H

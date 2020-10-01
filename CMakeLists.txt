@@ -11,8 +11,8 @@ add_executable(
         library/library.h
         library/html/extract/inner.cpp library/html/extract/inner.h
         library/html/extract/outer.cpp library/html/extract/outer.h
-        library/utility/text.cpp library/utility/text.h
-        library/utility/replace.cpp library/utility/replace.h
+        library/utility/text/trim.cpp library/utility/text/trim.h
+        library/utility/text/replace.cpp library/utility/text/replace.h
 )
 
 if (CURL_FOUND)
