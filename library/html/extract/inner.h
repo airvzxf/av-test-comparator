@@ -4,6 +4,6 @@
 #include <string>
 
 namespace library::html::extract::inner {
-    std::string getHtmlInnerFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag);
+    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt);
 }
 #endif //AV_TEST_COMPARATOR_INNER_H

@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(CURL REQUIRED)
 
 add_executable(
-        av_test_comparator main.cpp
+        av_test_comparator
+        main.cpp
         library/library.h
         library/html/extract/inner.cpp library/html/extract/inner.h
         library/html/extract/outer.cpp library/html/extract/outer.h

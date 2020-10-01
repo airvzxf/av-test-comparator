@@ -2,42 +2,40 @@
 #include "outer.h"
 
 namespace library::html::extract::outer {
-    std::string
-    getHtmlTagFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag,
-                   bool extract,
-                   bool displayError) {
-        std::string tagContent;
+    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt, bool erase,
+                            bool displayError) {
+        std::string extraction;
 
-        if (htmlCode.empty())
-            return tagContent;
+        if (text.empty())
+            return extraction;
 
-        std::size_t firstPosition = htmlCode.find(firstTag);
+        std::size_t firstPosition = text.find(startAt);
         if (firstPosition == std::string::npos) {
             if (displayError)
-                std::cerr << "Error: Not found the first HTML tag -> " << firstTag << "." << std::endl;
-            return tagContent;
+                std::cerr << "Error: Not found the first HTML tag -> " << startAt << "." << std::endl;
+            return extraction;
         }
 
-        std::size_t lastPosition = htmlCode.find(lastTag, firstPosition + firstTag.size());
+        std::size_t lastPosition = text.find(endAt, firstPosition + startAt.size());
         if (lastPosition == std::string::npos) {
             if (displayError)
-                std::cerr << "Error: Not found the last HTML tag -> " << lastTag << "." << std::endl;
-            return tagContent;
+                std::cerr << "Error: Not found the last HTML tag -> " << endAt << "." << std::endl;
+            return extraction;
         }
 
-        std::size_t size = lastPosition - firstPosition + lastTag.size();
-        tagContent = htmlCode.substr(firstPosition, size);
+        std::size_t size = lastPosition - firstPosition + endAt.size();
+        extraction = text.substr(firstPosition, size);
 
-        if (extract) {
-            const std::string firstCode = htmlCode.substr(0, firstPosition);
-            const std::string lastCode = htmlCode.substr(lastPosition + lastTag.size());
-            htmlCode = firstCode + lastCode;
+        if (erase) {
+            const std::string firstCode = text.substr(0, firstPosition);
+            const std::string lastCode = text.substr(lastPosition + endAt.size());
+            text = firstCode + lastCode;
         }
 
-        return tagContent;
+        return extraction;
     }
 
-    std::string getHtmlTagFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag) {
-        return getHtmlTagFrom(htmlCode, firstTag, lastTag, false, false);
+    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt) {
+        return getTextFrom(text, startAt, endAt, false, false);
     }
 }

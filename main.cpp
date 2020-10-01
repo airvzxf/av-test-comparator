@@ -275,34 +275,33 @@ static std::string cleanText(std::string text) {
 }
 
 static std::string getHtmlTableFrom(std::string &htmlCode) {
-    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<table>", "</table>");
+    return library::html::extract::outer::getTextFrom(htmlCode, "<table>", "</table>");
 }
 
 static std::string getHtmlTbodyFrom(std::string &htmlCode) {
-    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<tbody>", "</tbody>");
+    return library::html::extract::outer::getTextFrom(htmlCode, "<tbody>", "</tbody>");
 }
 
 static std::string getHtmlTrFrom(std::string &htmlCode) {
-    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<tr", "</tr>", true, false);
+    return library::html::extract::outer::getTextFrom(htmlCode, "<tr", "</tr>", true, false);
 }
 
 static std::string getHtmlTdFrom(std::string &htmlCode) {
-    return library::html::extract::outer::getHtmlTagFrom(htmlCode, "<td", "</td>", true, false);
+    return library::html::extract::outer::getTextFrom(htmlCode, "<td", "</td>", true, false);
 }
 
 static std::string getProducerFrom(std::string &htmlCode) {
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "<strong>", "</strong>");
+    std::string text = library::html::extract::inner::getTextFrom(htmlCode, "<strong>", "</strong>");
     return cleanText(text);
 }
 
 static std::string getProducerVersionFrom(std::string &htmlCode) {
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "style=\"max-width:220px\">",
-                                                                       "</span>");
+    std::string text = library::html::extract::inner::getTextFrom(htmlCode, "style=\"max-width:220px\">", "</span>");
     return cleanText(text);
 }
 
 static unsigned short getCertifiedFrom(std::string &htmlCode) {
-    std::string url = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "src=\"", "\" alt=\"");
+    std::string url = library::html::extract::inner::getTextFrom(htmlCode, "src=\"", "\" alt=\"");
     std::size_t position = url.find("_tp_");
     if (position != std::string::npos)
         return 1;
@@ -310,7 +309,7 @@ static unsigned short getCertifiedFrom(std::string &htmlCode) {
 }
 
 static float getProtectionFrom(std::string &htmlCode) {
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
+    std::string text = library::html::extract::inner::getTextFrom(htmlCode, "data-label=\"", "\">");
     try {
         return std::stof(text);
     }
@@ -321,7 +320,7 @@ static float getProtectionFrom(std::string &htmlCode) {
 }
 
 static float getPerformanceFrom(std::string &htmlCode) {
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
+    std::string text = library::html::extract::inner::getTextFrom(htmlCode, "data-label=\"", "\">");
     try {
         return std::stof(text);
     }
@@ -332,7 +331,7 @@ static float getPerformanceFrom(std::string &htmlCode) {
 }
 
 static float getUsabilityFrom(std::string &htmlCode) {
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "data-label=\"", "\">");
+    std::string text = library::html::extract::inner::getTextFrom(htmlCode, "data-label=\"", "\">");
     try {
         return std::stof(text);
     }
@@ -343,19 +342,19 @@ static float getUsabilityFrom(std::string &htmlCode) {
 }
 
 static std::string getLinkFrom(std::string &htmlCode) {
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(htmlCode, "href=\"", "\" tabindex=");
+    std::string text = library::html::extract::inner::getTextFrom(htmlCode, "href=\"", "\" tabindex=");
     return "https://www.av-test.org" + cleanText(text) + "/";
 }
 
 static unsigned short getYearFrom(std::string &link) {
-    std::string month = library::html::extract::inner::getHtmlInnerFrom(link, "windows-10/", "-");
+    std::string month = library::html::extract::inner::getTextFrom(link, "windows-10/", "-");
     transform(month.begin(), month.end(), month.begin(), ::tolower);
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(link, "windows-10/" + month + "-", "/");
+    std::string text = library::html::extract::inner::getTextFrom(link, "windows-10/" + month + "-", "/");
     return (unsigned short) std::strtoul(text.c_str(), nullptr, 0);
 }
 
 static unsigned short getMonthFrom(std::string &link) {
-    std::string text = library::html::extract::inner::getHtmlInnerFrom(link, "windows-10/", "-");
+    std::string text = library::html::extract::inner::getTextFrom(link, "windows-10/", "-");
     transform(text.begin(), text.end(), text.begin(), ::tolower);
     if (text == "january")
         return 1;

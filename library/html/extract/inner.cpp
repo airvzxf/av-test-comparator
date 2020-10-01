@@ -1,24 +1,24 @@
 #include "inner.h"
 
 namespace library::html::extract::inner {
-    std::string getHtmlInnerFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag) {
-        std::string tagContent;
+    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt) {
+        std::string extraction;
 
-        if (htmlCode.empty())
-            return tagContent;
+        if (text.empty())
+            return extraction;
 
-        std::size_t firstPosition = htmlCode.find(firstTag);
+        std::size_t firstPosition = text.find(startAt);
         if (firstPosition == std::string::npos)
-            return tagContent;
+            return extraction;
 
-        std::size_t innerPosition = firstPosition + firstTag.size();
-        std::size_t lastPosition = htmlCode.find(lastTag, innerPosition);
+        std::size_t innerPosition = firstPosition + startAt.size();
+        std::size_t lastPosition = text.find(endAt, innerPosition);
         if (lastPosition == std::string::npos)
-            return tagContent;
+            return extraction;
 
         std::size_t size = lastPosition - innerPosition;
-        tagContent = htmlCode.substr(innerPosition, size);
+        extraction = text.substr(innerPosition, size);
 
-        return tagContent;
+        return extraction;
     }
 }

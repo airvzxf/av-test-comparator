@@ -4,10 +4,9 @@
 #include <string>
 
 namespace library::html::extract::outer {
-    std::string getHtmlTagFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag);
+    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt);
 
-    std::string
-    getHtmlTagFrom(std::string &htmlCode, const std::string &firstTag, const std::string &lastTag, bool extract,
-                   bool displayError);
+    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt, bool remove,
+                            bool displayError);
 }
 #endif //AV_TEST_COMPARATOR_OUTER_H
