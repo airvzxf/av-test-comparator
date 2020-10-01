@@ -11,10 +11,11 @@ add_executable(
         library/library.h
         library/html/extract/inner.cpp library/html/extract/inner.h
         library/html/extract/outer.cpp library/html/extract/outer.h
-        library/utility/text/trim.cpp library/utility/text/trim.h
-        library/utility/text/replace.cpp library/utility/text/replace.h
+        library/html/request.cpp library/html/request.h
         library/utility/text/clean.cpp library/utility/text/clean.h
         library/utility/text/escape.cpp library/utility/text/escape.h
+        library/utility/text/replace.cpp library/utility/text/replace.h
+        library/utility/text/trim.cpp library/utility/text/trim.h
 )
 
 if (CURL_FOUND)

@@ -1,11 +1,6 @@
 #include <iostream>
-#include <utility>
 #include <vector>
-#include <curl/curl.h>
 #include "library/library.h"
-
-static std::string errorMessage;
-static const char *userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0";
 
 struct antivirus {
     std::string name;
@@ -57,8 +52,6 @@ struct antivirus {
 
 std::vector<antivirus> allAntivirus;
 
-static size_t writeCallbackWith(void *contents, size_t size, size_t memoryBytes, void *userData);
-
 static int extractInformationFrom(const std::string &url);
 
 static std::string getHtmlTableFrom(std::string &htmlCode);
@@ -87,43 +80,8 @@ static unsigned short getYearFrom(std::string &link);
 
 static unsigned short getMonthFrom(std::string &link);
 
-static size_t writeCallbackWith(void *contents, size_t size, size_t memoryBytes, void *userData) {
-    ((std::string *) userData)->append((char *) contents, size * memoryBytes);
-    return size * memoryBytes;
-}
-
-static std::string getHtmlCodeFrom(const std::string &url) {
-    CURL *curl;
-    CURLcode res = CURL_LAST;
-    std::string readBuffer;
-
-    curl = curl_easy_init();
-    if (!curl) {
-        errorMessage = "CURL Error: ";
-        errorMessage += curl_easy_strerror(res);
-        throw std::runtime_error(errorMessage.c_str());
-    }
-
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent);
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, true);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallbackWith);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-
-    res = curl_easy_perform(curl);
-    if (res != CURLE_OK) {
-        errorMessage = "CURL Error: ";
-        errorMessage += curl_easy_strerror(res);
-        throw std::runtime_error(errorMessage.c_str());
-    }
-
-    curl_easy_cleanup(curl);
-
-    return readBuffer;
-}
-
 static int extractInformationFrom(const std::string &url) {
-    std::string htmlCode = getHtmlCodeFrom(url);
+    std::string htmlCode = library::html::request::dataFrom(url);
     std::string table = getHtmlTableFrom(htmlCode);
     std::string tbody = getHtmlTbodyFrom(table);
     std::string tr;

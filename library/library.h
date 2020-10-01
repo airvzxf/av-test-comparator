@@ -3,6 +3,7 @@
 
 #include "html/extract/inner.h"
 #include "html/extract/outer.h"
+#include "html/request.h"
 #include "utility/text/clean.h"
 #include "utility/text/escape.h"
 #include "utility/text/replace.h"
