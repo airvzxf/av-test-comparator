@@ -89,34 +89,12 @@ static unsigned short getYearFrom(std::string &link);
 
 static unsigned short getMonthFrom(std::string &link);
 
-std::string &ltrim(std::string &str, const std::string &chars = "\t\n\v\f\r ") {
-    str.erase(0, str.find_first_not_of(chars));
-    return str;
-}
-
-std::string &rtrim(std::string &str, const std::string &chars = "\t\n\v\f\r ") {
-    str.erase(str.find_last_not_of(chars) + 1);
-    return str;
-}
-
-std::string &trim(std::string &str, const std::string &chars = "\t\n\v\f\r ") {
-    return ltrim(rtrim(str, chars), chars);
-}
-
-void replaceAll(std::string &str, const std::string &old, const std::string &repl) {
-    size_t pos = 0;
-    while ((pos = str.find(old, pos)) != std::string::npos) {
-        str.replace(pos, old.length(), repl);
-        pos += repl.length();
-    }
-}
-
 std::string convertEscapeCharacters(std::string &text) {
-    replaceAll(text, std::string("&amp;"), std::string("&"));
-    replaceAll(text, std::string("&apos;"), std::string("'"));
-    replaceAll(text, std::string("&quot;"), std::string("\""));
-    replaceAll(text, std::string("&gt;"), std::string(">"));
-    replaceAll(text, std::string("&lt;"), std::string("<"));
+    library::utility::text::replace(text, std::string("&amp;"), std::string("&"));
+    library::utility::text::replace(text, std::string("&apos;"), std::string("'"));
+    library::utility::text::replace(text, std::string("&quot;"), std::string("\""));
+    library::utility::text::replace(text, std::string("&gt;"), std::string(">"));
+    library::utility::text::replace(text, std::string("&lt;"), std::string("<"));
     return text;
 }
 
@@ -270,7 +248,7 @@ static int extractInformationFrom(const std::string &url) {
 }
 
 static std::string cleanText(std::string text) {
-    std::string trimText = trim(text);
+    std::string trimText = library::utility::text::trim(text);
     return convertEscapeCharacters(trimText);
 }
 
