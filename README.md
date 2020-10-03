@@ -5,5 +5,5 @@ Compare the best antivirus software, this application collects the results of AV
 https://www.av-test.org
 
 Tech TODOs:
-- [] Split the main code into small pieces using namespaces.
-- [] Add error stack trace with the information of the extraction.
+- [x] Split the main code into small pieces using namespaces.
+- [x] Add error stack trace with the information of the extraction.
