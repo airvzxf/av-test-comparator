@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "values.h"
 #include "../../../../library/library.h"
 #include "../../../structure/settings.h"
@@ -64,14 +65,14 @@ std::string getLinkFrom(std::string &htmlCode) {
 
 unsigned short getYearFrom(std::string &link) {
     std::string month = library::html::find::inner::getTextFrom(link, "windows-10/", "-");
-    transform(month.begin(), month.end(), month.begin(), ::tolower);
+    std::transform(month.begin(), month.end(), month.begin(), ::tolower);
     std::string text = library::html::find::inner::getTextFrom(link, "windows-10/" + month + "-", "/");
     return (unsigned short) std::strtoul(text.c_str(), nullptr, 0);
 }
 
 unsigned short getMonthFrom(std::string &link) {
     std::string text = library::html::find::inner::getTextFrom(link, "windows-10/", "-");
-    transform(text.begin(), text.end(), text.begin(), ::tolower);
+    std::transform(text.begin(), text.end(), text.begin(), ::tolower);
     if (text == "january")
         return 1;
     if (text == "february")
