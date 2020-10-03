@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.17)
 project(av_test_comparator)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
 
 find_package(CURL REQUIRED)
 
@@ -9,8 +11,9 @@ add_executable(
         av_test_comparator
         main.cpp
         core/core.h
-        core/structure/catalog.h
         core/structure/antivirus.h
+        core/structure/catalog.h
+        core/structure/settings.h core/structure/settings.cpp
         core/windows/pc/detail.cpp core/windows/pc/detail.h
         core/windows/pc/main.cpp core/windows/pc/main.h
         library/library.h

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "detail.h"
 #include "../../../library/library.h"
+#include "../../structure/settings.h"
 
 void getProtectionFrom(std::string &htmlCode, float &prev, float &now);
 
@@ -14,18 +15,7 @@ namespace core::windows::pc::detail {
 
     int setInformationFrom(const std::string &url, core::structure::antivirus::result &toResults) {
         std::string htmlCode = library::html::request::getDataFrom(url);
-
-        std::string table;
-        std::string tbody;
-        std::string tr;
-        std::string td;
-        std::string dayZeroPrev, dayZeroNow;
-        std::string detectionPrev, detectionNow;
-        std::string slowingDownStand, slowingDownHigh;
-        std::string slowerDownStand, slowerDownHigh;
-        std::string slowerLaunchStand, slowerLaunchHigh;
-        std::string slowerInstallationStand, slowerInstallationHigh;
-        std::string slowerCopyingStand, slowerCopyingHigh;
+        std::string table, tbody;
 
         // Description table
         table = library::html::extract::tag::getTableFrom(htmlCode);
@@ -71,7 +61,8 @@ void getProtectionFrom(std::string &htmlCode, float &prev, float &now) {
         prev = std::stof(prevText);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the PROTECTION PREV value from the details page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the PROTECTION PREV value from the details page." << std::endl;
         prev = 0;
     }
 
@@ -82,7 +73,8 @@ void getProtectionFrom(std::string &htmlCode, float &prev, float &now) {
         now = std::stof(nowText);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the PROTECTION NOW value from the details page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the PROTECTION NOW value from the details page." << std::endl;
         now = 0;
     }
 }
@@ -101,7 +93,8 @@ void getPerformanceFrom(std::string &htmlCode, float &prev, float &now) {
         prev = std::stof(prevText);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the PERFORMANCE PREV value from the details page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the PERFORMANCE PREV value from the details page." << std::endl;
         prev = 0;
     }
 
@@ -114,7 +107,8 @@ void getPerformanceFrom(std::string &htmlCode, float &prev, float &now) {
         now = std::stof(nowText);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the PERFORMANCE NOW value from the details page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the PERFORMANCE NOW value from the details page." << std::endl;
         now = 0;
     }
 }
@@ -134,7 +128,8 @@ void getUsabilityFrom(std::string &htmlCode, float &prev, float &now) {
         prev = std::stof(prevText);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the USABILITY PREV value from the details page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the USABILITY PREV value from the details page." << std::endl;
         prev = 0;
     }
 
@@ -147,7 +142,8 @@ void getUsabilityFrom(std::string &htmlCode, float &prev, float &now) {
         now = std::stof(nowText);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the USABILITY NOW value from the details page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the USABILITY NOW value from the details page." << std::endl;
         now = 0;
     }
 }
@@ -167,7 +163,8 @@ void getUsabilityFrom(std::string &htmlCode, float &value) {
         value = std::stof(valueText);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the USABILITY VALUE value from the details page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the USABILITY VALUE value from the details page." << std::endl;
         value = 0;
     }
 }

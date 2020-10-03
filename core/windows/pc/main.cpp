@@ -1,7 +1,8 @@
 #include <iostream>
 #include "main.h"
-#include "../../../library/library.h"
 #include "detail.h"
+#include "../../structure/settings.h"
+#include "../../../library/library.h"
 
 std::string getCompanyFrom(std::string &htmlCode);
 
@@ -23,6 +24,9 @@ unsigned short getMonthFrom(std::string &link);
 
 namespace core::windows::pc::main {
     int setInformationFrom(const std::string &url, std::vector<core::structure::antivirus> &toCatalog) {
+        if (core::structure::settings::getInstance()->debug.display)
+            std::cout << "url: " << url << std::endl;
+
         std::string htmlCode = library::html::request::getDataFrom(url);
         std::string table = library::html::find::tag::getTableFrom(htmlCode);
         std::string tbody = library::html::find::tag::getTbodyFrom(table);
@@ -39,6 +43,7 @@ namespace core::windows::pc::main {
         float usability = 0;
         std::string link;
         int exists;
+
         do {
             tr = library::html::extract::tag::getTrFrom(tbody);
             tdCounter = 0;
@@ -67,21 +72,21 @@ namespace core::windows::pc::main {
             if (company.empty())
                 continue;
 
-            if (false) {
+            if (core::structure::settings::getInstance()->debug.display) {
                 std::cout << "company:     -" << company << "-" << std::endl;
                 std::cout << "version:     -" << version << "-" << std::endl;
                 std::cout << "topProduct:  -" << topProduct << "-" << std::endl;
                 std::cout << "protection:  -" << protection << "-" << std::endl;
                 std::cout << "performance: -" << performance << "-" << std::endl;
                 std::cout << "usability:   -" << usability << "-" << std::endl;
-                std::cout << "link:        -" << link << "-" << std::endl;
                 std::cout << "year:        -" << year << "-" << std::endl;
                 std::cout << "month:       -" << month << "-" << std::endl;
+                std::cout << "link:        -" << link << std::endl;
             }
 
             unsigned long index = 0;
             for (const auto &antivirus: toCatalog) {
-                if (antivirus.name == company) {
+                if (antivirus.company == company) {
                     exists = true;
                     break;
                 }
@@ -109,22 +114,23 @@ namespace core::windows::pc::main {
                     toCatalog.at(index).results.back().performance = performance;
                     toCatalog.at(index).results.back().usability = usability;
                 }
+                // TODO: Add results for every detail results into the general results.
                 core::windows::pc::detail::setInformationFrom(link, toCatalog.at(index).results.back());
             }
 
-            if (false)
+            if (core::structure::settings::getInstance()->debug.display)
                 std::cout << std::endl;
         } while (!tr.empty());
 
-        if (false) {
+        if (core::structure::settings::getInstance()->debug.display) {
             for (const auto &current : toCatalog) {
-                std::cout << "name: " << current.name << std::endl;
+                std::cout << "company: " << current.company << std::endl;
                 std::cout << "general.reviews:     " << current.general.reviews << std::endl;
                 std::cout << "general.topProduct:  " << current.general.topProduct << std::endl;
                 std::cout << "general.protection:  " << current.general.protection << std::endl;
                 std::cout << "general.performance: " << current.general.performance << std::endl;
                 std::cout << "general.usability:   " << current.general.usability << std::endl;
-                std::cout << "----------------------------------------" << std::endl;
+                std::cout << "------------------------------------------------------------" << std::endl;
                 for (const auto &result : current.results) {
                     std::cout << "result.year:        " << result.year << std::endl;
                     std::cout << "result.month:       " << result.month << std::endl;
@@ -133,7 +139,7 @@ namespace core::windows::pc::main {
                     std::cout << "result.protection:  " << result.protection << std::endl;
                     std::cout << "result.performance: " << result.performance << std::endl;
                     std::cout << "result.usability:   " << result.usability << std::endl;
-                    std::cout << "----------" << std::endl;
+                    std::cout << "---------------" << std::endl;
                     std::cout << "result.dayZeroPrev:             " << result.dayZeroPrev << std::endl;
                     std::cout << "result.dayZeroNow:              " << result.dayZeroNow << std::endl;
                     std::cout << "result.detectionPrev:           " << result.detectionPrev << std::endl;
@@ -154,7 +160,7 @@ namespace core::windows::pc::main {
                     std::cout << "result.falseDetectionsNow:      " << result.falseDetectionsNow << std::endl;
                     std::cout << "result.falseWarnings:           " << result.falseWarnings << std::endl;
                     std::cout << "result.falseBlockages:          " << result.falseBlockages << std::endl;
-                    std::cout << "--------------------" << std::endl;
+                    std::cout << "------------------------------" << std::endl;
                 }
                 std::cout << std::endl;
             }
@@ -170,8 +176,7 @@ std::string getCompanyFrom(std::string &htmlCode) {
 }
 
 std::string getProductFrom(std::string &htmlCode) {
-    std::string text = library::html::find::inner::getTextFrom(htmlCode, "style=\"max-width:220px\">",
-                                                               "</span>");
+    std::string text = library::html::find::inner::getTextFrom(htmlCode, "style=\"max-width:220px\">", "</span>");
     return library::utility::text::clean(text);
 }
 
@@ -189,7 +194,8 @@ float getProtectionFrom(std::string &htmlCode) {
         return std::stof(text);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the PROTECTION value from the general page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the PROTECTION value from the general page." << std::endl;
         return 0;
     }
 }
@@ -200,7 +206,8 @@ float getPerformanceFrom(std::string &htmlCode) {
         return std::stof(text);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the PERFORMANCE value from the general page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the PERFORMANCE value from the general page." << std::endl;
         return 0;
     }
 }
@@ -211,7 +218,8 @@ float getUsabilityFrom(std::string &htmlCode) {
         return std::stof(text);
     }
     catch (const std::exception &error) {
-        std::cerr << "Error: Trying to get the USABILITY value from the general page." << std::endl;
+        if (core::structure::settings::getInstance()->error.display)
+            std::cerr << "Error: Trying to get the USABILITY value from the general page." << std::endl;
         return 0;
     }
 }

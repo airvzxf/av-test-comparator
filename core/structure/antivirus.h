@@ -5,10 +5,10 @@
 
 namespace core::structure {
     struct antivirus {
-        std::string name{};
+        std::string company{};
 
         explicit antivirus(std::string name) {
-            this->name = std::move(name);
+            this->company = std::move(name);
         }
 
         struct general {
