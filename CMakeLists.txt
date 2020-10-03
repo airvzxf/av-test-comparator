@@ -16,6 +16,9 @@ add_executable(
         core/structure/settings.h core/structure/settings.cpp
         core/windows/pc/detail.cpp core/windows/pc/detail.h
         core/windows/pc/main.cpp core/windows/pc/main.h
+        core/windows/pc/helper/assign.cpp core/windows/pc/helper/assign.h
+        core/windows/pc/helper/display.cpp core/windows/pc/helper/display.h
+        core/windows/pc/helper/values.cpp core/windows/pc/helper/values.h
         library/library.h
         library/html/extract/outer.cpp library/html/extract/outer.h
         library/html/extract/tag.cpp library/html/extract/tag.h
