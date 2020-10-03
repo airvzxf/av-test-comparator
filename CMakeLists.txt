@@ -8,9 +8,15 @@ find_package(CURL REQUIRED)
 add_executable(
         av_test_comparator
         main.cpp
+        core/core.h
+        core/structure/catalog.h
+        core/structure/antivirus.h
+        core/windows/pc/main.cpp core/windows/pc/main.h
         library/library.h
-        library/html/extract/inner.cpp library/html/extract/inner.h
         library/html/extract/outer.cpp library/html/extract/outer.h
+        library/html/find/inner.cpp library/html/find/inner.h
+        library/html/find/outer.cpp library/html/find/outer.h
+        library/html/find/tag.cpp library/html/find/tag.h
         library/html/request.cpp library/html/request.h
         library/utility/text/clean.cpp library/utility/text/clean.h
         library/utility/text/escape.cpp library/utility/text/escape.h

@@ -1,6 +1,6 @@
 #include "inner.h"
 
-namespace library::html::extract::inner {
+namespace library::html::find::inner {
     std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt) {
         std::string extraction;
 

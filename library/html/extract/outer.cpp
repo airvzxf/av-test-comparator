@@ -2,8 +2,9 @@
 #include "outer.h"
 
 namespace library::html::extract::outer {
-    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt, bool erase,
-                            bool displayError) {
+    std::string
+    getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt, bool erase,
+                bool displayError) {
         std::string extraction;
 
         if (text.empty())
@@ -35,7 +36,7 @@ namespace library::html::extract::outer {
         return extraction;
     }
 
-    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt) {
-        return getTextFrom(text, startAt, endAt, false, false);
+    std::string getTextFrom(std::string &text, const std::string &startAt, const std::string &endAt, bool remove) {
+        return getTextFrom(text, startAt, endAt, remove, false);
     }
 }
