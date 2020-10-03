@@ -2,7 +2,6 @@
 #include "core/core.h"
 
 int main() {
-    // TODO: Fix the error (added remove tag TD rather than extract) -> Error: Not found the first ELEMENT -> -|<td|-.
     auto *settings = core::structure::settings::getInstance();
     settings->error.display = true;
     settings->debug.display = true;

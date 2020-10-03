@@ -29,11 +29,17 @@ namespace core::windows::pc::main {
         int exists;
 
         do {
+            if (tbody == "<tbody></tbody>")
+                break;
+
             tr = library::html::extract::tag::getTrFrom(tbody);
             tdCounter = 0;
             exists = false;
 
             do {
+                if (tdCounter > 4)
+                    break;
+
                 td = library::html::extract::tag::getTdFrom(tr);
                 if (tdCounter == 0) {
                     company = getCompanyFrom(td);
