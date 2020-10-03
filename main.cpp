@@ -1,5 +1,4 @@
 #include <vector>
-#include <iostream>
 #include "core/core.h"
 
 int main() {
@@ -7,20 +6,15 @@ int main() {
 
     std::vector<std::string> urls;
     urls.emplace_back(mainUrl + "august-2020");
-//    urls.emplace_back(mainUrl + "june-2020");
+    urls.emplace_back(mainUrl + "june-2020");
 
-    std::vector<core::structure::antivirus> &catalog = core::structure::catalog;
-    catalog.reserve(32);
+    std::vector<core::structure::antivirus> &toCatalog = core::structure::catalog;
+    toCatalog.reserve(32);
 
     for (std::string &url : urls) {
         url += "/";
-        std::cout << "url: " << url << std::endl << std::endl;
-        core::windows::pc::main::getInformationFrom(url, catalog);
+        core::windows::pc::main::setInformationFrom(url, toCatalog);
     }
-
-    std::cout << "sizeof:   " << sizeof(catalog) << '\n';
-    std::cout << "size:     " << catalog.size() << '\n';
-    std::cout << "capacity: " << catalog.capacity() << '\n';
 
     return 0;
 }

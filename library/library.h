@@ -2,6 +2,7 @@
 #define AV_TEST_COMPARATOR_LIBRARY_LIBRARY_H
 
 #include "html/extract/outer.h"
+#include "html/extract/tag.h"
 #include "html/find/tag.h"
 #include "html/find/inner.h"
 #include "html/find/outer.h"

@@ -1,6 +1,5 @@
 #include "tag.h"
 #include "inner.h"
-#include "../extract/outer.h"
 #include "outer.h"
 
 namespace library::html::find::tag {
@@ -12,12 +11,8 @@ namespace library::html::find::tag {
         return library::html::find::outer::getTextFrom(htmlCode, "<tbody>", "</tbody>");
     }
 
-    std::string extractTrFrom(std::string &htmlCode) {
-        return library::html::extract::outer::getTextFrom(htmlCode, "<tr", "</tr>", true, false);
-    }
-
-    std::string extractTdFrom(std::string &htmlCode) {
-        return library::html::extract::outer::getTextFrom(htmlCode, "<td", "</td>", true, false);
+    std::string getSpanFrom(std::string &htmlCode) {
+        return library::html::find::inner::getTextFrom(htmlCode, "<span>", "</span>");
     }
 
     std::string getStrongFrom(std::string &htmlCode) {

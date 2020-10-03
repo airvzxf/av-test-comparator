@@ -1,6 +1,8 @@
 #ifndef AV_TEST_COMPARATOR_CORE_STRUCTURE_ANTIVIRUS_H
 #define AV_TEST_COMPARATOR_CORE_STRUCTURE_ANTIVIRUS_H
 
+#include <vector>
+
 namespace core::structure {
     struct antivirus {
         std::string name{};

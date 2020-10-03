@@ -8,9 +8,7 @@ namespace library::html::find::tag {
 
     std::string getTbodyFrom(std::string &htmlCode);
 
-    std::string extractTrFrom(std::string &htmlCode);
-
-    std::string extractTdFrom(std::string &htmlCode);
+    std::string getSpanFrom(std::string &htmlCode);
 
     std::string getStrongFrom(std::string &htmlCode);
 

@@ -11,9 +11,11 @@ add_executable(
         core/core.h
         core/structure/catalog.h
         core/structure/antivirus.h
+        core/windows/pc/detail.cpp core/windows/pc/detail.h
         core/windows/pc/main.cpp core/windows/pc/main.h
         library/library.h
         library/html/extract/outer.cpp library/html/extract/outer.h
+        library/html/extract/tag.cpp library/html/extract/tag.h
         library/html/find/inner.cpp library/html/find/inner.h
         library/html/find/outer.cpp library/html/find/outer.h
         library/html/find/tag.cpp library/html/find/tag.h
