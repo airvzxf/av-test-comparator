@@ -114,8 +114,28 @@ namespace core::windows::pc::main {
                     toCatalog.at(index).results.back().performance = performance;
                     toCatalog.at(index).results.back().usability = usability;
                 }
-                // TODO: Add results for every detail results into the general results.
                 core::windows::pc::detail::setInformationFrom(link, toCatalog.at(index).results.back());
+                structure::antivirus::result &result = toCatalog.at(index).results.back();
+                toCatalog.at(index).general.dayZeroPrev += result.dayZeroPrev;
+                toCatalog.at(index).general.dayZeroNow += result.dayZeroNow;
+                toCatalog.at(index).general.detectionPrev += result.detectionPrev;
+                toCatalog.at(index).general.detectionNow += result.detectionNow;
+                toCatalog.at(index).general.slowingDownStand += result.slowingDownStand;
+                toCatalog.at(index).general.slowingDownHigh += result.slowingDownHigh;
+                toCatalog.at(index).general.slowerDownStand += result.slowerDownStand;
+                toCatalog.at(index).general.slowerDownHigh += result.slowerDownHigh;
+                toCatalog.at(index).general.slowerLaunchStand += result.slowerLaunchStand;
+                toCatalog.at(index).general.slowerLaunchHigh += result.slowerLaunchHigh;
+                toCatalog.at(index).general.slowerInstallationStand += result.slowerInstallationStand;
+                toCatalog.at(index).general.slowerInstallationHigh += result.slowerInstallationHigh;
+                toCatalog.at(index).general.slowerCopyingStand += result.slowerCopyingStand;
+                toCatalog.at(index).general.slowerCopyingHigh += result.slowerCopyingHigh;
+                toCatalog.at(index).general.falseWarningsPrev += result.falseWarningsPrev;
+                toCatalog.at(index).general.falseWarningsNow += result.falseWarningsNow;
+                toCatalog.at(index).general.falseDetectionsPrev += result.falseDetectionsPrev;
+                toCatalog.at(index).general.falseDetectionsNow += result.falseDetectionsNow;
+                toCatalog.at(index).general.falseWarnings += result.falseWarnings;
+                toCatalog.at(index).general.falseBlockages += result.falseBlockages;
             }
 
             if (core::structure::settings::getInstance()->debug.display)
@@ -130,6 +150,27 @@ namespace core::windows::pc::main {
                 std::cout << "general.protection:  " << current.general.protection << std::endl;
                 std::cout << "general.performance: " << current.general.performance << std::endl;
                 std::cout << "general.usability:   " << current.general.usability << std::endl;
+                std::cout << "general.dayZeroPrev:             " << current.general.dayZeroPrev << std::endl;
+                std::cout << "general.dayZeroNow:              " << current.general.dayZeroNow << std::endl;
+                std::cout << "general.detectionPrev:           " << current.general.detectionPrev << std::endl;
+                std::cout << "general.detectionNow:            " << current.general.detectionNow << std::endl;
+                std::cout << "general.slowingDownStand:        " << current.general.slowingDownStand << std::endl;
+                std::cout << "general.slowingDownHigh:         " << current.general.slowingDownHigh << std::endl;
+                std::cout << "general.slowerDownStand:         " << current.general.slowerDownStand << std::endl;
+                std::cout << "general.slowerDownHigh:          " << current.general.slowerDownHigh << std::endl;
+                std::cout << "general.slowerLaunchStand:       " << current.general.slowerLaunchStand << std::endl;
+                std::cout << "general.slowerLaunchHigh:        " << current.general.slowerLaunchHigh << std::endl;
+                std::cout << "general.slowerInstallationStand: " << current.general.slowerInstallationStand
+                          << std::endl;
+                std::cout << "general.slowerInstallationHigh:  " << current.general.slowerInstallationHigh << std::endl;
+                std::cout << "general.slowerCopyingStand:      " << current.general.slowerCopyingStand << std::endl;
+                std::cout << "general.slowerCopyingHigh:       " << current.general.slowerCopyingHigh << std::endl;
+                std::cout << "general.falseWarningsPrev:       " << current.general.falseWarningsPrev << std::endl;
+                std::cout << "general.falseWarningsNow:        " << current.general.falseWarningsNow << std::endl;
+                std::cout << "general.falseDetectionsPrev:     " << current.general.falseDetectionsPrev << std::endl;
+                std::cout << "general.falseDetectionsNow:      " << current.general.falseDetectionsNow << std::endl;
+                std::cout << "general.falseWarnings:           " << current.general.falseWarnings << std::endl;
+                std::cout << "general.falseBlockages:          " << current.general.falseBlockages << std::endl;
                 std::cout << "------------------------------------------------------------" << std::endl;
                 for (const auto &result : current.results) {
                     std::cout << "result.year:        " << result.year << std::endl;

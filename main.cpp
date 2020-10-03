@@ -2,6 +2,8 @@
 #include "core/core.h"
 
 int main() {
+    // TODO: The main file inside the core package should be extracted in different files, let's call helper directory.
+    // TODO: Fix the error (added remove tag TD rather than extract) -> Error: Not found the first ELEMENT -> -|<td|-.
     auto *settings = core::structure::settings::getInstance();
     settings->error.display = true;
     settings->debug.display = true;
@@ -10,7 +12,8 @@ int main() {
 
     std::vector<std::string> urls;
     urls.emplace_back(mainUrl + "august-2020");
-//    urls.emplace_back(mainUrl + "june-2020");
+    urls.emplace_back(mainUrl + "june-2020");
+    urls.emplace_back(mainUrl + "april-2020");
 
     std::vector<core::structure::antivirus> &toCatalog = core::structure::catalog;
     toCatalog.reserve(32);
