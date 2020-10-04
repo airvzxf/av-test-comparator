@@ -7,7 +7,7 @@
 #include "helper/assign.h"
 
 namespace core::windows::pc::main {
-    int setInformationFrom(const std::string &url, std::vector<core::structure::antivirus> &toCatalog) {
+    int setInformationFrom(std::string &url, std::vector<core::structure::antivirus> &toCatalog) {
         if (core::structure::settings::getInstance()->debug.display)
             std::cout << "url: " << url << std::endl;
 

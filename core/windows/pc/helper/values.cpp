@@ -16,7 +16,7 @@ std::string getProductFrom(std::string &htmlCode) {
 
 unsigned short getCertifiedFrom(std::string &htmlCode) {
     std::string url = library::html::find::tag::getSrcFrom(htmlCode);
-    std::size_t position = url.find("_tp_");
+    std::size_t position = library::utility::text::findFrom(url, "_tp_");
     if (position != std::string::npos)
         return 1;
     return 0;

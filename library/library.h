@@ -9,6 +9,7 @@
 #include "html/request.h"
 #include "utility/text/clean.h"
 #include "utility/text/escape.h"
+#include "utility/text/find.h"
 #include "utility/text/replace.h"
 #include "utility/text/trim.h"
 

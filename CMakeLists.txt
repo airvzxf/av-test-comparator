@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(av_test_comparator)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 find_package(CURL REQUIRED)
 
@@ -26,6 +26,7 @@ add_executable(
         library/library.h
         library/utility/text/clean.cpp library/utility/text/clean.h
         library/utility/text/escape.cpp library/utility/text/escape.h
+        library/utility/text/find.cpp library/utility/text/find.h
         library/utility/text/replace.cpp library/utility/text/replace.h
         library/utility/text/trim.cpp library/utility/text/trim.h
 )

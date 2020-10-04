@@ -1,6 +1,7 @@
 #include <iostream>
 #include "outer.h"
 #include "../../../core/structure/settings.h"
+#include "../../library.h"
 
 namespace library::html::extract::outer {
     std::string
@@ -10,14 +11,14 @@ namespace library::html::extract::outer {
         if (text.empty())
             return extraction;
 
-        std::size_t firstPosition = text.find(startAt);
+        std::size_t firstPosition = library::utility::text::findFrom(text, startAt);
         if (firstPosition == std::string::npos) {
             if (core::structure::settings::getInstance()->error.display)
                 std::cerr << "Error: Not found the first ELEMENT -> -|" << startAt << "|-." << std::endl;
             return extraction;
         }
 
-        std::size_t lastPosition = text.find(endAt, firstPosition + startAt.size());
+        std::size_t lastPosition = library::utility::text::findFrom(text, endAt, firstPosition + startAt.size(), true);
         if (lastPosition == std::string::npos) {
             if (core::structure::settings::getInstance()->error.display)
                 std::cerr << "Error: Not found the last ELEMENT -> -|" << endAt << "|-." << std::endl;

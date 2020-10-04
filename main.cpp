@@ -17,7 +17,8 @@ int main() {
     toCatalog.reserve(32);
 
     for (std::string &url : urls) {
-        core::windows::pc::main::setInformationFrom(url + "/", toCatalog);
+        url += "/";
+        core::windows::pc::main::setInformationFrom(url, toCatalog);
     }
 
     return 0;
