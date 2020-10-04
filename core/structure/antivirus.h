@@ -16,9 +16,11 @@ namespace core::structure {
             unsigned short reviews{};
             unsigned short topProduct{};
             float protection{};
+            float protectionOverall{};
             float dayZero{};
             float detection{};
             float performance{};
+            float performanceOverall{};
             float slowingDownStand{};
             float slowingDownHigh{};
             float slowerDownStand{};
@@ -30,6 +32,7 @@ namespace core::structure {
             float slowerCopyingStand{};
             float slowerCopyingHigh{};
             float usability{};
+            float usabilityOverall{};
             float falseWarningsWebsites{};
             float falseDetections{};
             float falseWarnings{};

@@ -5,14 +5,16 @@
 namespace core::windows::pc::csv {
     void exportFrom(std::vector<core::structure::antivirus> &catalog, const std::string &filename) {
         std::string headerGeneral, headerDetail;
-        headerGeneral = "\"Antivirus\nPC\",Reviews,\"Top\nProduct\",\"General\nProtection\n▲\",\"0-day\n▲\","
-                        "\"Detection\n▲\",\"General\nPerformance\n▲\",\"Standard PC\nSlowing-down\n▼\","
+        headerGeneral = "\"Antivirus\nPC\",Reviews,\"Top\nProduct\",\"Protection\nOverall\n▲\","
+                        "\"Performance\nOverall\n▼\",\"Usability\nOverall\n▼\",\"General\nProtection\n▲\","
+                        "\"0-day\n▲\",\"Detection\n▲\",\"General\nPerformance\n▲\",\"Standard PC\nSlowing-down\n▼\","
                         "\"High end PC\nSlowing-down\n▼\",\"Standard PC\nSlower download\n▼\","
                         "\"High end PC\nSlower download\n▼\",\"Standard PC\nSlower launch\n▼\","
                         "\"High end PC\nSlower launch\n▼\",\"Standard PC\nSlower installation\n▼\","
                         "\"High end PC\nSlower installation\n▼\",\"Standard PC\nSlower copying\n▼\","
-                        "\"High end PC\nSlower copying\n▼\",\"General\nUsability\n▲\",\"False warnings\nWebsites\n▼\","
-                        "\"False detections\n▼\",\"False\nwarnings\n▼\",\"False\nblockages\n▼\",,";
+                        "\"High end PC\nSlower copying\n▼\",\"General\nUsability\n▲\","
+                        "\"False warnings\nWebsites\n▼\",\"False detections\n▼\",\"False\nwarnings\n▼\","
+                        "\"False\nblockages\n▼\",,";
         headerDetail = "Year,Month,Version,\"Top\nProduct\",\"General\nProtection\n▲\",\"July\n0-day\n▲\","
                        "\"August\n0-day\n▲\",\"July\nDetection\n▲\",\"August\nDetection\n▲\","
                        "\"General\nPerformance\n▲\",\"Standard PC\nSlowing-down\n▼\",\"High end PC\nSlowing-down\n▼\","
@@ -30,6 +32,9 @@ namespace core::windows::pc::csv {
             data += antivirus.company + ",";
             data += std::to_string(antivirus.general.reviews) + ",";
             data += std::to_string(antivirus.general.topProduct) + ",";
+            data += std::to_string(antivirus.general.protectionOverall) + ",";
+            data += std::to_string(antivirus.general.performanceOverall) + ",";
+            data += std::to_string(antivirus.general.usabilityOverall) + ",";
             data += std::to_string(antivirus.general.protection) + ",";
             data += std::to_string(antivirus.general.dayZero) + ",";
             data += std::to_string(antivirus.general.detection) + ",";
@@ -84,8 +89,6 @@ namespace core::windows::pc::csv {
             }
             data += "\n";
         }
-
-        std::cout << "maxResults: " << maxResults << std::endl;
 
         std::ofstream csvFile("./" + filename);
         csvFile << headerGeneral;

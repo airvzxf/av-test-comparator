@@ -9,6 +9,9 @@ void displayFrom(std::vector<core::structure::antivirus> &catalog, bool details)
         std::cout << "general.protection:  " << current.general.protection << std::endl;
         std::cout << "general.performance: " << current.general.performance << std::endl;
         std::cout << "general.usability:   " << current.general.usability << std::endl;
+        std::cout << "general.protection:  " << current.general.protectionOverall << std::endl;
+        std::cout << "general.performance: " << current.general.performanceOverall << std::endl;
+        std::cout << "general.usability:   " << current.general.usabilityOverall << std::endl;
         std::cout << "general.dayZero:                 " << current.general.dayZero << std::endl;
         std::cout << "general.detection:               " << current.general.detection << std::endl;
         std::cout << "general.slowingDownStand:        " << current.general.slowingDownStand << std::endl;
