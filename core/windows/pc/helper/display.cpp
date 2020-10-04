@@ -9,10 +9,8 @@ void displayFrom(std::vector<core::structure::antivirus> &catalog, bool details)
         std::cout << "general.protection:  " << current.general.protection << std::endl;
         std::cout << "general.performance: " << current.general.performance << std::endl;
         std::cout << "general.usability:   " << current.general.usability << std::endl;
-        std::cout << "general.dayZeroPrev:             " << current.general.dayZeroPrev << std::endl;
-        std::cout << "general.dayZeroNow:              " << current.general.dayZeroNow << std::endl;
-        std::cout << "general.detectionPrev:           " << current.general.detectionPrev << std::endl;
-        std::cout << "general.detectionNow:            " << current.general.detectionNow << std::endl;
+        std::cout << "general.dayZero:                 " << current.general.dayZero << std::endl;
+        std::cout << "general.detection:               " << current.general.detection << std::endl;
         std::cout << "general.slowingDownStand:        " << current.general.slowingDownStand << std::endl;
         std::cout << "general.slowingDownHigh:         " << current.general.slowingDownHigh << std::endl;
         std::cout << "general.slowerDownStand:         " << current.general.slowerDownStand << std::endl;
@@ -23,10 +21,8 @@ void displayFrom(std::vector<core::structure::antivirus> &catalog, bool details)
         std::cout << "general.slowerInstallationHigh:  " << current.general.slowerInstallationHigh << std::endl;
         std::cout << "general.slowerCopyingStand:      " << current.general.slowerCopyingStand << std::endl;
         std::cout << "general.slowerCopyingHigh:       " << current.general.slowerCopyingHigh << std::endl;
-        std::cout << "general.falseWarningsPrev:       " << current.general.falseWarningsPrev << std::endl;
-        std::cout << "general.falseWarningsNow:        " << current.general.falseWarningsNow << std::endl;
-        std::cout << "general.falseDetectionsPrev:     " << current.general.falseDetectionsPrev << std::endl;
-        std::cout << "general.falseDetectionsNow:      " << current.general.falseDetectionsNow << std::endl;
+        std::cout << "general.falseWarningsWebsites:   " << current.general.falseWarningsWebsites << std::endl;
+        std::cout << "general.falseDetections:         " << current.general.falseDetections << std::endl;
         std::cout << "general.falseWarnings:           " << current.general.falseWarnings << std::endl;
         std::cout << "general.falseBlockages:          " << current.general.falseBlockages << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;

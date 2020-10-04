@@ -12,6 +12,7 @@ add_executable(
         core/structure/antivirus.h
         core/structure/catalog.h
         core/structure/settings.h core/structure/settings.cpp
+        core/windows/pc/csv/export.cpp core/windows/pc/csv/export.h
         core/windows/pc/detail.cpp core/windows/pc/detail.h
         core/windows/pc/helper/assign.cpp core/windows/pc/helper/assign.h
         core/windows/pc/helper/display.cpp core/windows/pc/helper/display.h

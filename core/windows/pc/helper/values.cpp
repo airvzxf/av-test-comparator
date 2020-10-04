@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include "values.h"
 #include "../../../../library/library.h"
 #include "../../../structure/settings.h"
