@@ -89,20 +89,20 @@ namespace core::windows::pc::main {
             }
 
             if (!toCatalog.empty()) {
-                toCatalog.at(index).general.reviews += 1;
-                toCatalog.at(index).general.topProduct += topProduct;
-                toCatalog.at(index).general.protection += protection;
-                toCatalog.at(index).general.performance += performance;
-                toCatalog.at(index).general.usability += usability;
-                toCatalog.at(index).results.emplace_back();
-                if (!toCatalog.at(index).results.empty()) {
-                    toCatalog.at(index).results.back().year = year;
-                    toCatalog.at(index).results.back().month = month;
-                    toCatalog.at(index).results.back().version = version;
-                    toCatalog.at(index).results.back().topProduct = topProduct;
-                    toCatalog.at(index).results.back().protection = protection;
-                    toCatalog.at(index).results.back().performance = performance;
-                    toCatalog.at(index).results.back().usability = usability;
+                toCatalog[index].general.reviews += 1;
+                toCatalog[index].general.topProduct += topProduct;
+                toCatalog[index].general.protection += protection;
+                toCatalog[index].general.performance += performance;
+                toCatalog[index].general.usability += usability;
+                toCatalog[index].results.emplace_back();
+                if (!toCatalog[index].results.empty()) {
+                    toCatalog[index].results.back().year = year;
+                    toCatalog[index].results.back().month = month;
+                    toCatalog[index].results.back().version = version;
+                    toCatalog[index].results.back().topProduct = topProduct;
+                    toCatalog[index].results.back().protection = protection;
+                    toCatalog[index].results.back().performance = performance;
+                    toCatalog[index].results.back().usability = usability;
                 }
                 assignDetailFrom(toCatalog, index, link);
             }
