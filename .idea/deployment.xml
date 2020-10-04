@@ -6,6 +6,7 @@
         <serverdata>
           <mappings>
             <mapping deploy="/av_test_comparator" local="$PROJECT_DIR$/cmake-build-debug/av_test_comparator" web="/" />
+            <mapping deploy="/av_test_comparator" local="$PROJECT_DIR$/cmake-build-release/av_test_comparator" web="/" />
           </mappings>
         </serverdata>
       </paths>
